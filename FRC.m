@@ -70,8 +70,8 @@ for z = 1:zSlices
         end
         imageFRC(b, 1, z) = ((b * maxRadius) / binCount) / (max(height, width) * pixelSize);
         if binCounter(b, 1, z) > 0
-            % binThresholds(b, 1, z) = (((sqrt(2) - 1) / 2) + (((sqrt(2) - 1) * sqrt(2)) / sqrt(binCounter(b, 1, z)))) / (1 + ((sqrt(2) - 1) / 2) + (((sqrt(2) - 1) * sqrt(2)) / sqrt(binCounter(b, 1, z))));
-            % binThresholds(b, 2, z) = (((1 / 6) / 2) + (((1 / 6) * sqrt(2)) / sqrt(binCounter(b, 1, z)))) / (1 + ((1 / 6) / 2) + (((1 / 6) * sqrt(2)) / sqrt(binCounter(b, 1, z))));
+            binThresholds(b, 1, z) = (((sqrt(2) - 1) / 2) + (((sqrt(2) - 1) * sqrt(2)) / sqrt(binCounter(b, 1, z)))) / (1 + ((sqrt(2) - 1) / 2) + (((sqrt(2) - 1) * sqrt(2)) / sqrt(binCounter(b, 1, z))));
+            binThresholds(b, 2, z) = (((1 / 6) / 2) + (((1 / 6) * sqrt(2)) / sqrt(binCounter(b, 1, z)))) / (1 + ((1 / 6) / 2) + (((1 / 6) * sqrt(2)) / sqrt(binCounter(b, 1, z))));
         else
             binThresholds(b, :, z) = NaN;
         end
@@ -88,9 +88,9 @@ for z = 1:zSlices
     mu = mean(noiseRegion);
     sigma = std(detrend(noiseRegion)); 
     thresholds(1) = mu + (3 * sigma);
-    % thresholds(2) = ((1 - (1 / sqrt(2))) / (1 - (1 - (1 / sqrt(2))))) * (sigma^2);
+    thresholds(2) = ((1 - (1 / sqrt(2))) / (1 - (1 - (1 / sqrt(2))))) * (sigma^2);
     thresholds(3) = 1 - (1 / sqrt(2));
-    % thresholds(4) = ((1 / 7) / (1 - (1 / 7))) * (sigma^2);
+    thresholds(4) = ((1 / 7) / (1 - (1 / 7))) * (sigma^2);
     thresholds(5) = 1 / 7;
     fprintf("Z-Slice = %d\n", z);
     fprintf("FRC Range: [%e, %e]\n", min(imageFRC(:, 2, z)), max(imageFRC(:, 2, z)));
@@ -101,7 +101,7 @@ for z = 1:zSlices
     fprintf("\tFixed-1/7 (Noise-dependent) = %e\n", thresholds(4));
     fprintf("\tFixed-1/7 (Noise-independent) = %e\n", thresholds(5));
     for t = 1:5
-        % crossingIndex = find(diff(sign(imageFRC(:, 2, z) - thresholds(t))) < 0, 1, 'first');
+        crossingIndex = find(diff(sign(imageFRC(:, 2, z) - thresholds(t))) < 0, 1, 'first');
         if isempty(crossingIndex)
             aboveFRC = find(imageFRC(:, 2, z) > thresholds(t));
             belowFRC = find(imageFRC(:, 2, z) < thresholds(t));
