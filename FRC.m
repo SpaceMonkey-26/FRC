@@ -72,7 +72,7 @@ for z = 1:zSlices
         imageFRC(b, 1, z) = ((b * maxRadius) / binCount) / (max(height, width) * pixelSize);
         if binCounter(b, 1, z) > 0
             binThresholds(b, 1, z) = 3 / sqrt(binCounter(b, 1, z) / 2);
-            binThresholds(b, 2, z) = (0.2071 + 1.9102 / sqrt(binCounter(b, 1, z))) / (1.2701 + 0.9102 / sqrt(binCounter(b, 1, z)));
+            binThresholds(b, 2, z) = (0.2071 + 1.9102 / sqrt(binCounter(b, 1, z))) / (1.2071 + 0.9102 / sqrt(binCounter(b, 1, z)));
         else
             binThresholds(b, :, z) = NaN;
         end
